@@ -14,5 +14,5 @@ Topics Covered:
 - Subquery
 
 Database:
-- Sample retail database
+-hospital retail database
 
