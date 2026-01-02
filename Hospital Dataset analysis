@@ -1,0 +1,121 @@
+Connect to database (MySQL only)
+
+OBJECTIVE 1: ENCOUNTERS OVERVIEW
+
+a. Total encounters each year
+
+SELECT 
+    YEAR(start_date) AS year,
+    COUNT(*) AS total_encounters
+FROM encounters
+GROUP BY YEAR(start_date)
+ORDER BY year;
+---
+ b. For each year, what percentage of all encounters belonged to each encounter class
+-- (ambulatory, outpatient, wellness, urgent care, emergency, and inpatient)?
+
+SELECT
+    YEAR(start_date) AS year,
+    encounter_class,
+    COUNT(*) AS encounter_count,
+    ROUND(
+        COUNT(*) * 100.0 /
+        SUM(COUNT(*)) OVER (PARTITION BY YEAR(start_date)),
+        2
+    ) AS percentage_of_year
+FROM encounters
+GROUP BY YEAR(start_date), encounter_class
+ORDER BY year, encounter_class;
+----
+c. What percentage of encounters were over 24 hours versus under 24 hours?
+
+SELECT
+    CASE 
+        WHEN TIMESTAMPDIFF(HOUR, start_date, end_date) > 24 
+            THEN 'Over 24 Hours'
+        ELSE 'Under 24 Hours'
+    END AS duration_category,
+    COUNT(*) AS encounter_count,
+    ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER (), 2) AS percentage
+FROM encounters
+GROUP BY duration_category;
+----
+OBJECTIVE 2: COST & COVERAGE INSIGHTS
+a. How many encounters had zero payer coverage, and what percentage of total encounters does this represent?
+
+SELECT
+    COUNT(*) AS zero_coverage_encounters,
+    ROUND(
+        COUNT(*) * 100.0 /
+        (SELECT COUNT(*) FROM encounters),
+        2
+    ) AS percentage_of_total
+FROM encounters
+WHERE payer_coverage = 0;
+----
+ b. What are the top 10 most frequent procedures performed and the average base cost for each?
+
+ SELECT
+    procedure_code,
+    description,
+    COUNT(*) AS procedure_count,
+    ROUND(AVG(base_cost), 2) AS avg_base_cost
+FROM procedures
+GROUP BY procedure_code, description
+ORDER BY procedure_count DESC
+LIMIT 10;
+----
+
+ c. What are the top 10 procedures with the highest average base cost and the number of times they were performed?
+SELECT
+    procedure_code,
+    description,
+    COUNT(*) AS times_performed,
+    ROUND(AVG(base_cost), 2) AS avg_base_cost
+FROM procedures
+GROUP BY procedure_code, description
+ORDER BY avg_base_cost DESC
+LIMIT 10;
+----
+d. What is the average total claim cost for encounters, broken down by payer?
+
+SELECT
+    payer,
+    ROUND(AVG(total_claim_cost), 2) AS avg_claim_cost
+FROM claims
+GROUP BY payer
+ORDER BY avg_claim_cost DESC;
+----
+ OBJECTIVE 3: PATIENT BEHAVIOR ANALYSIS
+
+-- a. How many unique patients were admitted each quarter over time?
+SELECT
+    YEAR(start_date) AS year,
+    QUARTER(start_date) AS quarter,
+    COUNT(DISTINCT patient_id) AS unique_patients
+FROM encounters
+GROUP BY YEAR(start_date), QUARTER(start_date)
+ORDER BY year, quarter;
+----
+-- b. How many patients were readmitted within 30 days of a previous encounter?
+
+SELECT COUNT(DISTINCT e1.patient_id) AS readmitted_patients
+FROM encounters e1
+JOIN encounters e2
+    ON e1.patient_id = e2.patient_id
+   AND e2.start_date > e1.end_date
+   AND DATEDIFF(e2.start_date, e1.end_date) <= 30;
+---
+
+c. Which patients had the most readmissions?
+
+SELECT
+    patient_id,
+    COUNT(*) - 1 AS readmission_count
+FROM encounters
+GROUP BY patient_id
+HAVING COUNT(*) > 1
+ORDER BY readmission_count DESC
+LIMIT 10;
+
+
