@@ -1,0 +1,136 @@
+ Database: Maven Movies (MySQL/PostgreSQL compatible)
+
+
+   1. BASIC OVERVIEW QUERIES
+
+
+-- Total customers
+SELECT COUNT(*) AS total_customers FROM customer;
+
+-- Total films
+SELECT COUNT(*) AS total_movies FROM film;
+
+-- Total rentals
+SELECT COUNT(*) AS total_rentals FROM rental;
+
+
+
+  2. CUSTOMER ANALYSIS
+
+
+Top 10 customers by total spending
+SELECT 
+    c.customer_id,
+    CONCAT(c.first_name, ' ', c.last_name) AS customer_name,
+    SUM(p.amount) AS total_spent
+FROM customer c
+JOIN payment p ON c.customer_id = p.customer_id
+GROUP BY c.customer_id, customer_name
+ORDER BY total_spent DESC
+LIMIT 10;
+
+-- Active vs inactive customers
+SELECT active, COUNT(*) AS total_customers
+FROM customer
+GROUP BY active;
+
+
+
+3. MOVIE & CATEGORY ANALYSIS
+
+
+-- Most popular movie categories (by rental count)
+SELECT 
+    cat.name AS category,
+    COUNT(r.rental_id) AS total_rentals
+FROM category cat
+JOIN film_category fc ON cat.category_id = fc.category_id
+JOIN inventory i ON fc.film_id = i.film_id
+JOIN rental r ON i.inventory_id = r.inventory_id
+GROUP BY cat.name
+ORDER BY total_rentals DESC;
+
+-- Top 5 most rented movies
+SELECT 
+    f.title,
+    COUNT(r.rental_id) AS rental_count
+FROM film f
+JOIN inventory i ON f.film_id = i.film_id
+JOIN rental r ON i.inventory_id = r.inventory_id
+GROUP BY f.title
+ORDER BY rental_count DESC
+LIMIT 5;
+
+
+
+  4. RENTAL TREND ANALYSIS
+  
+
+-- Monthly rental trend
+SELECT 
+    DATE_FORMAT(rental_date, '%Y-%m') AS month,
+    COUNT(*) AS total_rentals
+FROM rental
+GROUP BY month
+ORDER BY month;
+
+
+
+   5. REVENUE ANALYSIS
+  
+
+-- Total revenue
+SELECT SUM(amount) AS total_revenue FROM payment;
+
+-- Monthly revenue trend
+SELECT 
+    DATE_FORMAT(payment_date, '%Y-%m') AS month,
+    SUM(amount) AS monthly_revenue
+FROM payment
+GROUP BY month
+ORDER BY month;
+
+-- Store-wise revenue
+SELECT 
+    s.store_id,
+    SUM(p.amount) AS store_revenue
+FROM store s
+JOIN staff st ON s.store_id = st.store_id
+JOIN payment p ON st.staff_id = p.staff_id
+GROUP BY s.store_id;
+
+
+
+   6. ADVANCED SQL (WINDOW FUNCTIONS)
+  
+
+-- Rank customers by spending
+SELECT 
+    customer_id,
+    total_spent,
+    RANK() OVER (ORDER BY total_spent DESC) AS spending_rank
+FROM (
+    SELECT customer_id, SUM(amount) AS total_spent
+    FROM payment
+    GROUP BY customer_id
+) t;
+
+
+
+   7. BUSINESS INSIGHTS READY QUERY
+ 
+
+-- Top 3 categories by revenue
+SELECT 
+    cat.name AS category,
+    SUM(p.amount) AS total_revenue
+FROM payment p
+JOIN rental r ON p.rental_id = r.rental_id
+JOIN inventory i ON r.inventory_id = i.inventory_id
+JOIN film_category fc ON i.film_id = fc.film_id
+JOIN category cat ON fc.category_id = cat.category_id
+GROUP BY cat.name
+ORDER BY total_revenue DESC
+LIMIT 3;
+
+End of SQL Analysis
