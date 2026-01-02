@@ -1,0 +1,145 @@
+#  SQL Analysis – Maven Movies Dataset (README)
+
+
+
+---
+
+##  Dataset Overview
+
+Maven Movies Dataset**  fictional movie rental business-Database। is here customer, film, rental, payment more related table .
+
+###  Main Tables
+
+* `actor`
+* `film`
+* `film_actor`
+* `category`
+* `film_category`
+* `customer`
+* `rental`
+* `inventory`
+* `payment`
+* `staff`
+* `store`
+
+---
+
+# Tools & Technology
+
+* Database: MySQL / PostgreSQL
+* Language: SQL
+* Dataset: Maven Movies
+* Environment: MySQL Workbench / pgAdmin
+
+---
+
+#  Analysis Objectives
+
+* Movie rental business-এর performance analysis
+* Customer behavior বোঝা
+* Revenue & sales insight বের করা
+* Popular movies ও categories identify করা
+
+---
+
+# SQL Analysis Performed
+
+#1️⃣ Basic SQL Queries
+
+* SELECT, WHERE, ORDER BY
+* DISTINCT, LIMIT
+* Aggregate functions (COUNT, SUM, AVG)
+
+---
+
+#2️⃣ Customer Analysis
+
+* Total number of customers
+* Active vs inactive customers
+* Top customers based on total payment
+
+👉 Example Insights:
+
+* High-value customers identification
+
+---
+
+#3️⃣ Movie & Category Analysis
+
+* Total number of movies
+* Most popular movie categories
+* Category-wise rental count
+
+👉 Example Questions:
+
+* which category is the most rented?
+* which movie is most popular?
+
+---
+
+# 4️⃣ Rental Analysis
+
+* Total rentals
+* Rental trend analysis
+* Late vs on-time return analysis
+
+---
+
+# 5️⃣ Revenue Analysis
+
+* Total revenue calculation
+* Monthly revenue trend
+* Store-wise revenue comparison
+
+👉 SQL Concepts Used:
+
+* `SUM(amount)`
+* `GROUP BY`
+* `DATE` functions
+
+---
+
+# 6️⃣ Join Operations
+
+* INNER JOIN
+* LEFT JOIN
+* Multiple table joins
+
+👉 Example:
+
+* Customer + Rental + Payment join full sales analysis
+
+---
+
+# 8️⃣ Advanced SQL Analysis
+
+* Window Functions (ROW_NUMBER, RANK)
+* Top N analysis
+* Running total
+
+---
+
+# Key Insights
+
+* Certain movie categories consistently high revenue generateে
+* Few customers contribute large portion of total revenue
+* Weekend rentals is most popular
+
+---
+
+# Project Structure (Example)
+
+```
+Maven_Movies_SQL_Project/
+│── README.md
+│── schema.sql
+│── analysis_queries.sql
+│── insights.sql
+│── screenshots/
+```
+
+# Conclusion
+
+Using the Maven Movies dataset,it is possible to perform data analysis through SQL based on real-world business scenarios.
+This project demonstrates proficiency in SQL concepts ranging from fundamental queries to advanced analytical techniques.
+
