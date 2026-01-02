@@ -1,0 +1,114 @@
+# Maven Hospital Dataset 
+
+## 📌 Project Overview
+
+This project uses the **Maven Hospital Dataset** to analyze hospital operations, clinical activities, and financial performance. The dataset typically contains information related to patients, hospital visits, diagnoses, treatments, and billing.
+
+This README provides a clear overview of the dataset structure, project setup, and possible analysis ideas.
+
+---
+
+## 📂 Dataset Description
+
+The Maven Hospital Dataset usually consists of multiple tables/files. Example tables include:
+
+### 1️⃣ Patients
+
+* `patient_id` – Unique patient identifier
+* `first_name`, `last_name` – Patient name
+* `gender` – Gender
+* `date_of_birth` – Date of birth
+
+### 2️⃣ Encounters / Visits
+
+* `encounter_id` – Unique visit identifier
+* `patient_id` – Patient ID (FK)
+* `admit_date` – Admission date
+* `discharge_date` – Discharge date
+* `department` – Department (ER, ICU, OPD, etc.)
+
+### 3️⃣ Diagnoses
+
+* `diagnosis_id` – Unique diagnosis identifier
+* `encounter_id` – Visit ID (FK)
+* `diagnosis_code` – Diagnosis code
+* `diagnosis_description` – Diagnosis description
+
+### 4️⃣ Procedures / Treatments
+
+* `procedure_id` – Unique procedure identifier
+* `encounter_id` – Visit ID (FK)
+* `procedure_name` – Procedure or treatment name
+* `procedure_cost` – Cost of procedure
+
+### 5️⃣ Billing / Payments
+
+* `bill_id` – Unique bill identifier
+* `encounter_id` – Visit ID (FK)
+* `total_charge` – Total charge
+* `insurance_coverage` – Insurance coverage amount
+* `patient_payment` – Patient payment
+
+> ⚠️ Note: Table names and column names may vary depending on the dataset version.
+
+---
+
+## ⚙️ Tools & Technologies
+
+The following tools can be used in this project:
+
+* SQL (MySQL / PostgreSQL)
+* Excel / Google Sheets
+* Power BI / Tableau
+* Python (Pandas, Matplotlib, Seaborn)
+
+---
+
+## 📊 Possible Analysis
+
+Potential analysis ideas using this dataset:
+
+* Patient admission and discharge trends
+* Number of patients by department
+* Most common diagnoses
+* Average treatment cost
+* Insurance vs out-of-pocket payment analysis
+* Length of Stay (LOS) analysis
+
+---
+
+## 🚀 How to Use
+
+1. Download the dataset and place it in the `data/` folder
+2. Perform data cleaning as needed
+3. Run analysis using SQL or Python
+4. Create dashboards or reports
+
+---
+
+## 📁 Project Structure (Example)
+
+```
+Maven-Hospital-Analysis/
+│
+├── data/
+│   ├── patients.csv
+│   ├── encounters.csv
+│   ├── diagnoses.csv
+│   └── billing.csv
+│
+├── sql/
+│   └── analysis_queries.sql
+│
+├── dashboard/
+│   └── hospital_dashboard.pbix
+│
+└── README.md
+```
+
+
+## ✍️ Author
+
+* Name: Sanjid Alvi
+* Project: Maven Hospital Data Analysis
+
